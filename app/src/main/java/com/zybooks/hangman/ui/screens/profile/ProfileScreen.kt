@@ -8,11 +8,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.zybooks.hangman.Routes
 import com.zybooks.hangman.ui.theme.HangmanTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -31,7 +34,7 @@ fun ProfileScreen() {
             contentAlignment = Alignment.Center
         ) {
             Button(
-                onClick = {},
+                onClick = {navController.navigate(Routes.Start)},
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .height(60.dp),
@@ -51,7 +54,8 @@ fun ProfileScreen() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewGameScreen() {
+    val navController = rememberNavController()
     HangmanTheme {
-        ProfileScreen()
+        ProfileScreen(navController)
     }
 }

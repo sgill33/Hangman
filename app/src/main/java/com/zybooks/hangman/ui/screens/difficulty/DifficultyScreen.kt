@@ -8,10 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.zybooks.hangman.Routes
 import com.zybooks.hangman.ui.theme.HangmanTheme
 
 @Composable
-fun DifficultyScreen() {
+fun DifficultyScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -37,7 +40,7 @@ fun DifficultyScreen() {
         ) {
             // Easy Button
             Button(
-                onClick = {},
+                onClick = {navController.navigate(Routes.Game)},
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(80.dp), // Large button
@@ -54,7 +57,7 @@ fun DifficultyScreen() {
 
             // Medium Button
             Button(
-                onClick = {},
+                onClick = {navController.navigate(Routes.Game)},
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(80.dp), // Large button
@@ -71,7 +74,7 @@ fun DifficultyScreen() {
 
             // Hard Button
             Button(
-                onClick = {},
+                onClick = {navController.navigate(Routes.Game)},
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(80.dp), // Large button
@@ -94,7 +97,8 @@ fun DifficultyScreen() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewDifficultyScreen() {
+    val navController = rememberNavController()
     HangmanTheme {
-        DifficultyScreen()
+        DifficultyScreen(navController)
     }
 }

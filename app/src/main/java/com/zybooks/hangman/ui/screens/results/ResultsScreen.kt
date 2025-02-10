@@ -8,10 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.zybooks.hangman.Routes
 import com.zybooks.hangman.ui.theme.HangmanTheme
 
 @Composable
-fun ResultsScreen() {
+fun ResultsScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -33,7 +36,7 @@ fun ResultsScreen() {
 
             // "Back to Home" button
             Button(
-                onClick = {},
+                onClick = {navController.navigate(Routes.Start)},
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .height(60.dp),
@@ -53,7 +56,8 @@ fun ResultsScreen() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewResultsScreen() {
+    val navController = rememberNavController()
     HangmanTheme {
-        ResultsScreen()
+        ResultsScreen(navController)
     }
 }

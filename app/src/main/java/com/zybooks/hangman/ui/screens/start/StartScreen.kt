@@ -9,9 +9,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zybooks.hangman.ui.theme.HangmanTheme
+import androidx.navigation.compose.rememberNavController
+import com.zybooks.hangman.Routes
+import androidx.navigation.NavController
 
 @Composable
-fun StartScreen() {
+fun StartScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -37,7 +40,7 @@ fun StartScreen() {
         ) {
             // Start Game Button
             Button(
-                onClick = {},
+                onClick = {navController.navigate(Routes.Difficulty) },
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .height(75.dp)
@@ -55,7 +58,7 @@ fun StartScreen() {
 
             // View Profile Button
             Button(
-                onClick = {},
+                onClick = {navController.navigate(Routes.Profile)},
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .height(75.dp)
@@ -79,7 +82,8 @@ fun StartScreen() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewStartScreen() {
+    val navController = rememberNavController()
     HangmanTheme {
-        StartScreen()
+        StartScreen(navController)
     }
 }
