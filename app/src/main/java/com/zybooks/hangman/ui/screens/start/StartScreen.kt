@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.zybooks.hangman.ui.theme.HangmanTheme
 
 @Composable
 fun StartScreen() {
@@ -16,42 +16,70 @@ fun StartScreen() {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Welcome text at the top
+        // Text at the top
         Text(
             text = "Welcome to Hangman",
             fontSize = 28.sp,
-            style = MaterialTheme.typography.headlineMedium
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(top = 75.dp) // Adds space at the top
         )
 
-        Spacer(modifier = Modifier.height(40.dp)) // Space between text and buttons
+        // Spacer to push buttons to the middle
+        Spacer(modifier = Modifier.weight(1f))
 
-        // Start Game Button
-        Button(
-            //onClick = { navController.navigate(Routes.Difficulty.route) }, // Navigate to difficulty selection
-            modifier = Modifier.fillMaxWidth(0.6f),
-            onClick = {}
+        // Buttons section (centered vertically)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Start Game", fontSize = 18.sp)
+            // Start Game Button
+            Button(
+                onClick = {},
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .height(75.dp)
+                ,
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text(
+                    text = "Start Game",
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp)) // Space between buttons
+
+            // View Profile Button
+            Button(
+                onClick = {},
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .height(75.dp)
+                ,
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+            ) {
+                Text(
+                    text = "View Profile",
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onSecondary
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(20.dp)) // Space between buttons
-
-        // View Profile Button
-        Button(
-            //onClick = { navController.navigate(Route.Profile.route) }, // Navigate to Profile
-            modifier = Modifier.fillMaxWidth(0.6f),
-            onClick = {}
-        ) {
-            Text(text = "View Profile", fontSize = 18.sp)
-        }
+        // Spacer to push everything to the right position
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
-@Preview
+// ✅ Preview with the app theme
+@Preview(showBackground = true)
 @Composable
-fun PreviewStartScreen(){
-    StartScreen()
+fun PreviewStartScreen() {
+    HangmanTheme {
+        StartScreen()
+    }
 }
