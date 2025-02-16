@@ -12,10 +12,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.zybooks.hangman.ui.theme.HangmanTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameScreen(navController: NavController) {
+fun GameScreen(navController: NavController, viewModel: GameViewModel = viewModel()) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -33,7 +34,7 @@ fun GameScreen(navController: NavController) {
                 .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.weight(0.1f)) // Push game content to center
+            Spacer(modifier = Modifier.weight(0.1f))
 
             Text(
                 text = "Guess the Word",
@@ -43,18 +44,19 @@ fun GameScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // TODO: Add Hangman game UI
+            // TODO: Add Hangman game UI (word display, hangman figure, etc.)
 
-            Spacer(modifier = Modifier.weight(1f)) // Push buttons to bottom
+            Spacer(modifier = Modifier.weight(1f))
 
-            // Alphabet Button Grid
-            AlphabetGrid()
+            // Pass ViewModel to AlphabetGrid
+            AlphabetGrid(viewModel)
         }
     }
 }
 
+
 @Composable
-fun AlphabetGrid() {
+fun AlphabetGrid(viewModel: GameViewModel) {
     val alphabet = ('A'..'Z').toList() // List of letters A-Z
     val chunkedAlphabet = alphabet.chunked(7) // Split into rows of 7
 
@@ -70,24 +72,35 @@ fun AlphabetGrid() {
                 modifier = Modifier.padding(bottom = 6.dp)
             ) {
                 row.forEach { letter ->
+                    val isClicked = letter in viewModel.clickedLetters
+
                     Button(
-                        onClick = { /* Handle letter click */ },
+                        onClick = { viewModel.onLetterClick(letter) },
                         modifier = Modifier.size(50.dp), // Square buttons
                         shape = RoundedCornerShape(6.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
-                        contentPadding = PaddingValues(0.dp)
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (isClicked) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.secondary, // Gray out when clicked
+                            contentColor = if (isClicked) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSecondary
+                        ),
+                        contentPadding = PaddingValues(0.dp),
+                        enabled = !isClicked // Disable button after it's clicked
                     ) {
-                        Text(
-                            text = letter.toString(),
-                            fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onSecondary
-                        )
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            Text(
+                                text = letter.toString(),
+                                fontSize = 18.sp
+                            )
+                        }
                     }
                 }
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
