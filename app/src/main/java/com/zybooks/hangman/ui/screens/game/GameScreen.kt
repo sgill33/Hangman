@@ -15,10 +15,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.zybooks.hangman.ui.theme.HangmanTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.zybooks.hangman.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameScreen(navController: NavController, viewModel: GameViewModel = viewModel()) {
+    viewModel.setupGame("medium")
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -46,14 +49,29 @@ fun GameScreen(navController: NavController, viewModel: GameViewModel = viewMode
 
             Spacer(modifier = Modifier.height(400.dp))
 
-            // TODO: Add Hangman game UI (word display, hangman figure, etc.)
-            WordDisplay("elephants", viewModel.clickedLetters)
+            Text(
+                text = "Lives Left: ${viewModel.livesLeft}",
+                fontSize = 18.sp,
+                color = MaterialTheme.colorScheme.error
+            )
+
+            WordDisplay(viewModel.guessingWord, viewModel.clickedLetters)
 
 
             Spacer(modifier = Modifier.weight(1f))
 
             // Pass ViewModel to AlphabetGrid
             AlphabetGrid(viewModel)
+
+            if (viewModel.isGameWon) {
+                navController.navigate(Routes.Results)  // Go back to start screen
+            }
+
+            // Show "Game Over" pop-up if lives are gone
+            if (viewModel.isGameLost) {
+                navController.navigate(Routes.Results) // Restart game
+            }
+
         }
     }
 }
@@ -87,7 +105,7 @@ fun AlphabetGrid(viewModel: GameViewModel) {
                             contentColor = if (isClicked) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSecondary
                         ),
                         contentPadding = PaddingValues(0.dp),
-                        enabled = !isClicked // Disable button after it's clicked
+                        enabled = !isClicked && !viewModel.isGameLost
                     ) {
                         Box(
                             contentAlignment = Alignment.Center,
@@ -145,6 +163,8 @@ fun WordDisplay(word: String, guessedLetters: List<Char>){
         }
     }
 }
+
+
 
 @Preview(showBackground = true)
 @Composable
