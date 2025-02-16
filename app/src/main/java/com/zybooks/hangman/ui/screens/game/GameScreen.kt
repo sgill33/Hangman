@@ -1,11 +1,13 @@
 package com.zybooks.hangman.ui.screens.game
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,9 +44,11 @@ fun GameScreen(navController: NavController, viewModel: GameViewModel = viewMode
                 color = MaterialTheme.colorScheme.primary
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(400.dp))
 
             // TODO: Add Hangman game UI (word display, hangman figure, etc.)
+            WordDisplay("elephants", viewModel.clickedLetters)
+
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -101,6 +105,46 @@ fun AlphabetGrid(viewModel: GameViewModel) {
     }
 }
 
+@Composable
+fun WordDisplay(word: String, guessedLetters: List<Char>){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        word.forEach { letter ->
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(horizontal = 4.dp) // Space between letters
+            ) {
+                // Display the letter (Initially, it can be shown as '_' until guessed)
+                val isGuessed = letter.uppercaseChar() in guessedLetters
+
+                Text(
+                    text = letter.toString().uppercase(),
+                    fontSize = 32.sp,
+                    color = if (isGuessed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background
+                )
+
+                // Draw underline below the letter
+                Canvas(
+                    modifier = Modifier
+                        .width(30.dp)
+                        .height(2.dp) // Thin black underline
+                ) {
+                    drawLine(
+                        color = Color.Black,
+                        start = androidx.compose.ui.geometry.Offset(0f, size.height / 2),
+                        end = androidx.compose.ui.geometry.Offset(size.width, size.height / 2),
+                        strokeWidth = 4f
+                    )
+                }
+            }
+        }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
