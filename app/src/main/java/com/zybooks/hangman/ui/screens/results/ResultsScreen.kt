@@ -14,7 +14,9 @@ import com.zybooks.hangman.Routes
 import com.zybooks.hangman.ui.theme.HangmanTheme
 
 @Composable
-fun ResultsScreen(navController: NavController) {
+fun ResultsScreen(navController: NavController, resultsRoute: Routes.Results) {
+    val message = if (resultsRoute.playerWon) "You Win!" else "You Lost :("
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -24,19 +26,32 @@ fun ResultsScreen(navController: NavController) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // "You Win" text centered
+            // Show "You Win" or "You Lost"
             Text(
-                text = "You Win",
+                text = message,
                 fontSize = 32.sp,
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.headlineMedium
             )
 
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Show what the word was
+            if (!resultsRoute.playerWon) {
+                Text(
+                    text = "The Word Was: ${resultsRoute.answer}",
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+
             Spacer(modifier = Modifier.height(20.dp))
 
             // "Back to Home" button
             Button(
-                onClick = {navController.navigate(Routes.Start)},
+                onClick = { navController.navigate(Routes.Start) },
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .height(60.dp),
@@ -52,12 +67,16 @@ fun ResultsScreen(navController: NavController) {
     }
 }
 
+
 // ✅ Preview with the app theme
 @Preview(showBackground = true)
 @Composable
 fun PreviewResultsScreen() {
     val navController = rememberNavController()
+    val previewResults = Routes.Results(answer = "example", playerWon = false) // Provide default values
+
     HangmanTheme {
-        ResultsScreen(navController)
+        ResultsScreen(navController, previewResults)
     }
 }
+
