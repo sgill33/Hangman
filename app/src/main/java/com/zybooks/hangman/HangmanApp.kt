@@ -3,6 +3,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.zybooks.hangman.ui.screens.difficulty.DifficultyScreen
 import com.zybooks.hangman.ui.screens.game.GameScreen
 import com.zybooks.hangman.ui.screens.profile.ProfileScreen
@@ -18,10 +19,15 @@ sealed class Routes{
     data object Difficulty
 
     @Serializable
-    data object Game
+    data class Game(
+        val difficulty: String
+    )
 
     @Serializable
-    data object Results
+    data class Results(
+        val answer: String,
+        val playerWon: Boolean
+    )
 
     @Serializable
     data object Profile
@@ -44,12 +50,14 @@ fun HangmanApp(){
             DifficultyScreen(navController)
         }
 
-        composable<Routes.Game> {
-            GameScreen(navController)
+        composable<Routes.Game> { backStackEntry ->
+            val game : Routes.Game = backStackEntry.toRoute()
+            GameScreen(navController, game)
         }
 
-        composable<Routes.Results> {
-            ResultsScreen(navController)
+        composable<Routes.Results> { backStackEntry ->
+            val results : Routes.Results = backStackEntry.toRoute()
+            ResultsScreen(navController, results)
         }
 
         composable<Routes.Profile> {
