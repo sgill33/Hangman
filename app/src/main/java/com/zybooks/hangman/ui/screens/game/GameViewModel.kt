@@ -1,12 +1,11 @@
 package com.zybooks.hangman.ui.screens.game
 
-import android.app.Application
 import androidx.compose.runtime.*
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import com.zybooks.hangman.data.WordDataSource
 
-class GameViewModel(application: Application) : AndroidViewModel(application){
+class GameViewModel : ViewModel() {
+
 var guessingWord by mutableStateOf("hangman") // Default word
         private set
 
