@@ -1,13 +1,16 @@
 package com.zybooks.hangman.ui.screens.game
 
+import android.app.Application
 import androidx.compose.runtime.*
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import com.zybooks.hangman.data.WordDataSource
 
-class GameViewModel : ViewModel() {
-    var guessingWord by mutableStateOf("hangman") // Default word
+class GameViewModel(application: Application) : AndroidViewModel(application){
+var guessingWord by mutableStateOf("hangman") // Default word
         private set
 
-    var livesLeft by mutableStateOf(6) // Default number of lives
+    var livesLeft by mutableIntStateOf(6) // Default number of lives
         private set
 
     // Keep track of clicked letters
@@ -20,6 +23,9 @@ class GameViewModel : ViewModel() {
 
     var isGameLost by mutableStateOf(false)
         private set
+
+    // Load words from WordDataSource
+    private val wordList = WordDataSource.loadWords()
 
     // Function to update clicked letters
     fun onLetterClick(letter: Char) {
@@ -41,25 +47,34 @@ class GameViewModel : ViewModel() {
         }
     }
 
-
-    private fun generateWord(){
-        guessingWord = "elephants"
-    }
-
-    private fun setDifficulty(difficulty: String){
-        if (difficulty == "easy"){
-            return
-        }
-        else if (difficulty == "medium"){
-            livesLeft = 4
-        }
-        else{
-            livesLeft = 3
+    private fun generateWord(difficulty: String) {
+        val words = filterWordsByDifficulty(difficulty)
+        if (words.isNotEmpty()) {
+            guessingWord = words.random() // Pick a random word
         }
     }
+
+
+    // Filter words based on difficulty
+    private fun filterWordsByDifficulty(difficulty: String): List<String> {
+        return when (difficulty) {
+            "easy" -> wordList.filter { it.length in 3..5 }
+            "medium" -> wordList.filter { it.length in 5..7 }
+            else -> wordList.filter { it.length in 6..9 } // Hard mode
+        }
+    }
+
+
+    private fun setDifficulty(difficulty: String) {
+        livesLeft = when (difficulty) {
+            "hard" -> 4
+            else -> 6 // Hard mode
+        }
+    }
+
 
     fun setupGame(difficulty: String){
-        generateWord()
+        generateWord(difficulty)
         setDifficulty(difficulty)
     }
 
