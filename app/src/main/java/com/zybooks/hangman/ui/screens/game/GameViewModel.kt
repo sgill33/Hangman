@@ -6,7 +6,7 @@ import com.zybooks.hangman.data.WordDataSource
 
 class GameViewModel : ViewModel() {
 
-var guessingWord by mutableStateOf("hangman") // Default word
+    var guessingWord by mutableStateOf("hangman") // Default word
         private set
 
     var livesLeft by mutableIntStateOf(6) // Default number of lives
@@ -53,7 +53,6 @@ var guessingWord by mutableStateOf("hangman") // Default word
         }
     }
 
-
     // Filter words based on difficulty
     private fun filterWordsByDifficulty(difficulty: String): List<String> {
         return when (difficulty) {
@@ -63,14 +62,12 @@ var guessingWord by mutableStateOf("hangman") // Default word
         }
     }
 
-
     private fun setDifficulty(difficulty: String) {
         livesLeft = when (difficulty) {
             "hard" -> 4
             else -> 6 // Hard mode
         }
     }
-
 
     fun setupGame(difficulty: String){
         generateWord(difficulty)
