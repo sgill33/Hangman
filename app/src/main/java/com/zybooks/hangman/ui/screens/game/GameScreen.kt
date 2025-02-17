@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,8 +20,12 @@ import com.zybooks.hangman.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameScreen(navController: NavController, viewModel: GameViewModel = viewModel()) {
-    viewModel.setupGame("medium")
+fun GameScreen(navController: NavController,game: Routes.Game, viewModel: GameViewModel = viewModel()) {
+    val difficulty = game.difficulty // Extract difficulty
+
+    LaunchedEffect(Unit) {
+        viewModel.setupGame(difficulty) // Pass difficulty to ViewModel
+    }
 
     Scaffold(
         topBar = {
@@ -64,13 +69,13 @@ fun GameScreen(navController: NavController, viewModel: GameViewModel = viewMode
             AlphabetGrid(viewModel)
 
             if (viewModel.isGameWon) {
-                navController.navigate(Routes.Results)  // Go back to start screen
+                navController.navigate(Routes.Results(answer = viewModel.guessingWord, playerWon = true))
             }
 
-            // Show "Game Over" pop-up if lives are gone
             if (viewModel.isGameLost) {
-                navController.navigate(Routes.Results) // Restart game
+                navController.navigate(Routes.Results(answer = viewModel.guessingWord, playerWon = false))
             }
+
 
         }
     }
@@ -170,7 +175,9 @@ fun WordDisplay(word: String, guessedLetters: List<Char>){
 @Composable
 fun PreviewGameScreen() {
     val navController = rememberNavController()
+    val gameDifficulty = Routes.Game(difficulty = "medium")
     HangmanTheme {
-        GameScreen(navController)
+        GameScreen(navController, gameDifficulty)
     }
 }
+
