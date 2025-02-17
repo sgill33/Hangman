@@ -40,7 +40,7 @@ fun StartScreen(navController: NavController) {
         ) {
             // Start Game Button
             Button(
-                onClick = {navController.navigate(Routes.Difficulty) },
+                onClick = {navController.navigate(Routes.Players) },
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .height(75.dp)
