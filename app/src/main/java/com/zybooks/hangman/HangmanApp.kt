@@ -9,11 +9,19 @@ import com.zybooks.hangman.ui.screens.game.GameScreen
 import com.zybooks.hangman.ui.screens.profile.ProfileScreen
 import com.zybooks.hangman.ui.screens.results.ResultsScreen
 import com.zybooks.hangman.ui.screens.start.StartScreen
+import com.zybooks.hangman.ui.screens.players.PlayersScreen
+import com.zybooks.hangman.ui.screens.input.InputScreen
 import kotlinx.serialization.Serializable
 
 sealed class Routes{
     @Serializable
     data object Start
+
+    @Serializable
+    data object Players
+
+    @Serializable
+    data object Input
 
     @Serializable
     data object Difficulty
@@ -46,8 +54,16 @@ fun HangmanApp(){
             StartScreen(navController)
         }
 
+        composable<Routes.Players> {
+            PlayersScreen(navController)
+        }
+
         composable<Routes.Difficulty> {
             DifficultyScreen(navController)
+        }
+
+        composable<Routes.Input> {
+            InputScreen(navController)
         }
 
         composable<Routes.Game> { backStackEntry ->
