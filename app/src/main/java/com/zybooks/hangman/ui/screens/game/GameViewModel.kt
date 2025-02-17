@@ -74,4 +74,8 @@ class GameViewModel : ViewModel() {
         setDifficulty(difficulty)
     }
 
+    fun setWord(word: String){
+        guessingWord = word
+    }
+
 }

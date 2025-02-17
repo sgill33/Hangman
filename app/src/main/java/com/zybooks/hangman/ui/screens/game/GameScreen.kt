@@ -20,11 +20,16 @@ import com.zybooks.hangman.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameScreen(navController: NavController,game: Routes.Game, viewModel: GameViewModel = viewModel()) {
-    val difficulty = game.difficulty // Extract difficulty
-
+fun GameScreen(navController: NavController,
+   difficulty: String?,
+   word: String?,
+   viewModel: GameViewModel = viewModel()
+) {
     LaunchedEffect(Unit) {
-        viewModel.setupGame(difficulty) // Pass difficulty to ViewModel
+        when {
+            difficulty != null -> viewModel.setupGame(difficulty) // AI-selected word
+            word != null -> viewModel.setWord(word) // Player-entered word
+        }
     }
 
     Scaffold(
@@ -175,9 +180,11 @@ fun WordDisplay(word: String, guessedLetters: List<Char>){
 @Composable
 fun PreviewGameScreen() {
     val navController = rememberNavController()
-    val gameDifficulty = Routes.Game(difficulty = "medium")
+    val gameRoute = Routes.GameWithDifficulty("medium") // ✅ Correct way to instantiate
+
     HangmanTheme {
-        GameScreen(navController, gameDifficulty)
+        GameScreen(navController, difficulty = "easy", word = null)
     }
 }
+
 

@@ -27,9 +27,11 @@ sealed class Routes{
     data object Difficulty
 
     @Serializable
-    data class Game(
-        val difficulty: String
-    )
+    data class GameWithDifficulty(val difficulty: String)
+
+    @Serializable
+    data class GameWithWord(val word: String)
+
 
     @Serializable
     data class Results(
@@ -66,9 +68,15 @@ fun HangmanApp(){
             InputScreen(navController)
         }
 
-        composable<Routes.Game> { backStackEntry ->
-            val game : Routes.Game = backStackEntry.toRoute()
-            GameScreen(navController, game)
+        composable<Routes.GameWithDifficulty> { backStackEntry ->
+            val game : Routes.GameWithDifficulty = backStackEntry.toRoute()
+            GameScreen(navController, difficulty = game.difficulty, word = null)
+        }
+
+        // ✅ Handle player-inputted word game
+        composable<Routes.GameWithWord> { backStackEntry ->
+            val game: Routes.GameWithWord = backStackEntry.toRoute()
+            GameScreen(navController, difficulty = null, word = game.word)
         }
 
         composable<Routes.Results> { backStackEntry ->
@@ -80,6 +88,4 @@ fun HangmanApp(){
             ProfileScreen(navController)
         }
     }
-
-
 }

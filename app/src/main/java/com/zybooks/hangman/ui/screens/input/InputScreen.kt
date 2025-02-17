@@ -54,7 +54,7 @@ fun InputScreen(navController: NavController, inputViewModel: InputViewModel = v
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { navController.navigate(Routes.Game) },
+            onClick = { navController.navigate(Routes.GameWithWord(inputText)) },
             enabled = isInputValid,
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
