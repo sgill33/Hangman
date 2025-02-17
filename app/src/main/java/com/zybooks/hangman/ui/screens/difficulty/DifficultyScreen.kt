@@ -40,7 +40,7 @@ fun DifficultyScreen(navController: NavController) {
         ) {
             // Easy Button
             Button(
-                onClick = {navController.navigate(Routes.Game)},
+                onClick = {navController.navigate(Routes.Game("easy"))},
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(80.dp), // Large button
@@ -57,7 +57,7 @@ fun DifficultyScreen(navController: NavController) {
 
             // Medium Button
             Button(
-                onClick = {navController.navigate(Routes.Game)},
+                onClick = {navController.navigate(Routes.Game("medium"))},
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(80.dp), // Large button
@@ -74,7 +74,7 @@ fun DifficultyScreen(navController: NavController) {
 
             // Hard Button
             Button(
-                onClick = {navController.navigate(Routes.Game)},
+                onClick = {navController.navigate(Routes.Game("hard"))},
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
                     .height(80.dp), // Large button
