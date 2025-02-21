@@ -12,6 +12,8 @@ class GameViewModel : ViewModel() {
     var livesLeft by mutableIntStateOf(6) // Default number of lives
         private set
 
+    var showQuitDialog by mutableStateOf(false)
+
     // Keep track of clicked letters
     private val _clickedLetters = mutableStateListOf<Char>()
     val clickedLetters: List<Char> get() = _clickedLetters
@@ -76,6 +78,10 @@ class GameViewModel : ViewModel() {
 
     fun setWord(word: String){
         guessingWord = word
+    }
+
+    fun updateShowQuitDialog(show: Boolean){
+        showQuitDialog = show
     }
 
 }

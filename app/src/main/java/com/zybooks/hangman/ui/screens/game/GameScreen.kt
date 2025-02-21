@@ -3,6 +3,8 @@ package com.zybooks.hangman.ui.screens.game
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,10 +29,11 @@ fun GameScreen(navController: NavController,
    word: String?,
    viewModel: GameViewModel = viewModel()
 ) {
+
     LaunchedEffect(Unit) {
         when {
-            difficulty != null -> viewModel.setupGame(difficulty) // AI-selected word
-            word != null -> viewModel.setWord(word) // Player-entered word
+            difficulty != null -> viewModel.setupGame(difficulty) // random word
+            word != null -> viewModel.setWord(word) // player selected word
         }
     }
 
@@ -38,6 +41,15 @@ fun GameScreen(navController: NavController,
         topBar = {
             TopAppBar(
                 title = { Text("Hangman Game", fontSize = 20.sp) },
+                actions = {
+                    IconButton(onClick = { viewModel.updateShowQuitDialog(true) }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Quit Game",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
@@ -78,6 +90,34 @@ fun GameScreen(navController: NavController,
 
         }
     }
+    if (viewModel.showQuitDialog) {
+        QuitGameDialog(
+            onConfirmQuit = {
+                viewModel.updateShowQuitDialog(false)
+                navController.navigate(Routes.Start) // Navigate to home screen
+            },
+            onDismiss = { viewModel.updateShowQuitDialog(false) }
+        )
+    }
+}
+
+@Composable
+fun QuitGameDialog(onConfirmQuit: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Quit Game") },
+        text = { Text("Are you sure you want to quit the game?") },
+        confirmButton = {
+            TextButton(onClick = onConfirmQuit) {
+                Text("Yes, Quit", color = MaterialTheme.colorScheme.error)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
 }
 
 
@@ -142,7 +182,7 @@ fun WordDisplay(word: String, guessedLetters: List<Char>){
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(horizontal = 4.dp) // Space between letters
             ) {
-                // Display the letter (Initially, it can be shown as '_' until guessed)
+                // Display the letter (Initially '_' until guessed)
                 val isGuessed = letter.uppercaseChar() in guessedLetters
 
                 Text(
@@ -151,11 +191,11 @@ fun WordDisplay(word: String, guessedLetters: List<Char>){
                     color = if (isGuessed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background
                 )
 
-                // Draw underline below the letter
+                // Underline below the letter
                 Canvas(
                     modifier = Modifier
                         .width(30.dp)
-                        .height(2.dp) // Thin black underline
+                        .height(2.dp)
                 ) {
                     drawLine(
                         color = displayColor,
@@ -187,7 +227,7 @@ fun HangmanDrawing(livesLeft: Int) {
         val centerX = size.width * 0.5f
         val baseY = size.height - 10f
 
-        // ✅ Base of gallows
+        // Base of gallows
         drawLine(
             color = gallowsColor,
             start = Offset(startX, baseY),
@@ -195,7 +235,7 @@ fun HangmanDrawing(livesLeft: Int) {
             strokeWidth = strokeWidth
         )
 
-        // ✅ Vertical post
+        // Vertical post
         drawLine(
             color = gallowsColor,
             start = Offset(startX, baseY),
@@ -203,7 +243,7 @@ fun HangmanDrawing(livesLeft: Int) {
             strokeWidth = strokeWidth
         )
 
-        // ✅ Horizontal beam
+        // Horizontal beam
         drawLine(
             color = gallowsColor,
             start = Offset(startX, topY),
@@ -211,7 +251,7 @@ fun HangmanDrawing(livesLeft: Int) {
             strokeWidth = strokeWidth
         )
 
-        // ✅ Rope
+        // Rope
         drawLine(
             color = gallowsColor,
             start = Offset(size.width * 0.5f, topY),
@@ -220,7 +260,6 @@ fun HangmanDrawing(livesLeft: Int) {
         )
 
 
-        // ✅ Draw hangman based on lives left
         when (livesLeft) {
             6 -> { /* Only gallows, no drawing */ }
             5 -> drawHead(centerX, topY, hangmanColor)
