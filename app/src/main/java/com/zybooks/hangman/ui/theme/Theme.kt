@@ -1,19 +1,13 @@
 package com.zybooks.hangman.ui.theme
 
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zybooks.hangman.data.AppPreferences
 import com.zybooks.hangman.data.AppStorage
-import kotlinx.coroutines.runBlocking
 
 // 🎨 Dark Theme (Game-Like: Dark Background, Neon Colors)
 private val DarkColorScheme = darkColorScheme(

@@ -11,11 +11,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.zybooks.hangman.Routes
-import com.zybooks.hangman.data.AppPreferences
 import com.zybooks.hangman.data.AppStorage
 import com.zybooks.hangman.ui.theme.HangmanTheme
 import kotlinx.coroutines.launch
@@ -26,7 +24,6 @@ fun ResultsScreen(navController: NavController, resultsRoute: Routes.Results) {
 
     // Update Win/Loss values
     val store = AppStorage(LocalContext.current)
-    val appPrefs = store.appPreferencesFlow.collectAsStateWithLifecycle(AppPreferences())
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
