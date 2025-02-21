@@ -3,19 +3,42 @@ package com.zybooks.hangman.ui.screens.results
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.zybooks.hangman.Routes
+import com.zybooks.hangman.data.AppPreferences
+import com.zybooks.hangman.data.AppStorage
 import com.zybooks.hangman.ui.theme.HangmanTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun ResultsScreen(navController: NavController, resultsRoute: Routes.Results) {
     val message = if (resultsRoute.playerWon) "You Win!" else "You Lost :("
+
+    // Update Win/Loss values
+    val store = AppStorage(LocalContext.current)
+    val appPrefs = store.appPreferencesFlow.collectAsStateWithLifecycle(AppPreferences())
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            if (resultsRoute.playerWon) {
+                store.incrementGamesWon()
+            } else {
+                store.incrementGamesLost()
+            }
+        }
+    }
+
 
     Box(
         modifier = Modifier
