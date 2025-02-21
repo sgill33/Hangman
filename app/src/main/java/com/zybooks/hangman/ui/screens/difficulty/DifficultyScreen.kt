@@ -1,10 +1,13 @@
 package com.zybooks.hangman.ui.screens.difficulty
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -13,83 +16,84 @@ import androidx.navigation.compose.rememberNavController
 import com.zybooks.hangman.Routes
 import com.zybooks.hangman.ui.theme.HangmanTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DifficultyScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Title at the top
-        Text(
-            text = "Choose your difficulty",
-            fontSize = 28.sp,
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(top = 32.dp) // Adds space at the top
-        )
-
-        // Spacer to push buttons to the middle
-        Spacer(modifier = Modifier.weight(1f))
-
-        // Difficulty Buttons (Centered)
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // Easy Button
-            Button(
-                onClick = {navController.navigate(Routes.GameWithDifficulty("easy"))},
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(80.dp), // Large button
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) {
-                Text(
-                    text = "Easy",
-                    fontSize = 22.sp,
-                    color = MaterialTheme.colorScheme.onPrimary
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Select Difficulty", fontSize = 20.sp) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
-            }
-
-            Spacer(modifier = Modifier.height(60.dp))
-
-            // Medium Button
-            Button(
-                onClick = {navController.navigate(Routes.GameWithDifficulty("medium"))},
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(80.dp), // Large button
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-            ) {
-                Text(
-                    text = "Medium",
-                    fontSize = 22.sp,
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
-            }
-
-            Spacer(modifier = Modifier.height(60.dp))
-
-            // Hard Button
-            Button(
-                onClick = {navController.navigate(Routes.GameWithDifficulty("hard"))},
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(80.dp), // Large button
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
-            ) {
-                Text(
-                    text = "Hard",
-                    fontSize = 22.sp,
-                    color = MaterialTheme.colorScheme.onTertiary
-                )
-            }
+            )
         }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp),
+            horizontalAlignment = CenterHorizontally
+        ) {
+            // Title
+            Text(
+                text = "Choose your difficulty",
+                fontSize = 28.sp,
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(top = 32.dp)
+            )
 
-        // Spacer to push everything to the right position
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Difficulty Buttons
+            Column(
+                horizontalAlignment = CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                DifficultyButton("Easy", MaterialTheme.colorScheme.primary) {
+                    navController.navigate(Routes.GameWithDifficulty("easy"))
+                }
+                Spacer(modifier = Modifier.height(40.dp))
+                DifficultyButton("Medium", MaterialTheme.colorScheme.secondary) {
+                    navController.navigate(Routes.GameWithDifficulty("medium"))
+                }
+                Spacer(modifier = Modifier.height(40.dp))
+                DifficultyButton("Hard", MaterialTheme.colorScheme.tertiary) {
+                    navController.navigate(Routes.GameWithDifficulty("hard"))
+                }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+        }
+    }
+}
+
+@Composable
+fun DifficultyButton(text: String, color: Color, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth(0.7f)
+            .height(80.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = color)
+    ) {
+        Text(
+            text = text,
+            fontSize = 22.sp,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     }
 }
 
