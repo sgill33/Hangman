@@ -13,72 +13,79 @@ import androidx.navigation.compose.rememberNavController
 import com.zybooks.hangman.Routes
 import androidx.navigation.NavController
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Text at the top
-        Text(
-            text = "Welcome to Hangman",
-            fontSize = 28.sp,
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(top = 75.dp) // Adds space at the top
-        )
-
-        // Spacer to push buttons to the middle
-        Spacer(modifier = Modifier.weight(1f))
-
-        // Buttons section (centered vertically)
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // Start Game Button
-            Button(
-                onClick = {navController.navigate(Routes.Players) },
-                modifier = Modifier
-                    .fillMaxWidth(0.6f)
-                    .height(75.dp)
-                ,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) {
-                Text(
-                    text = "Start Game",
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onPrimary
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Hangman", fontSize = 20.sp) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
-            }
-
-            Spacer(modifier = Modifier.height(20.dp)) // Space between buttons
-
-            // View Profile Button
-            Button(
-                onClick = {navController.navigate(Routes.Profile)},
-                modifier = Modifier
-                    .fillMaxWidth(0.6f)
-                    .height(75.dp)
-                ,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-            ) {
-                Text(
-                    text = "View Profile",
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
-            }
+            )
         }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Welcome to Hangman",
+                fontSize = 28.sp,
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(top = 40.dp) // Adjusted spacing
+            )
 
-        // Spacer to push everything to the right position
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // Start Game Button
+                Button(
+                    onClick = { navController.navigate(Routes.Players) },
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .height(75.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(
+                        text = "Start Game",
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // View Profile Button
+                Button(
+                    onClick = { navController.navigate(Routes.Profile) },
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .height(75.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                ) {
+                    Text(
+                        text = "View Profile",
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+        }
     }
 }
 
-// ✅ Preview with the app theme
 @Preview(showBackground = true)
 @Composable
 fun PreviewStartScreen() {
@@ -87,3 +94,4 @@ fun PreviewStartScreen() {
         StartScreen(navController)
     }
 }
+

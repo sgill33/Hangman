@@ -1,6 +1,8 @@
 package com.zybooks.hangman.ui.screens.players
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,73 +15,89 @@ import androidx.navigation.compose.rememberNavController
 import com.zybooks.hangman.Routes
 import androidx.navigation.NavController
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayersScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-        ,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Text at the top
-        Text(
-            text = "How Many Players?",
-            fontSize = 28.sp,
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(top = 75.dp) // Adds space at the top
-        )
-
-        // Spacer to push buttons to the middle
-        Spacer(modifier = Modifier.weight(1f))
-
-        // Buttons section (centered vertically)
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // Start Game Button
-            Button(
-                onClick = {navController.navigate(Routes.Difficulty) },
-                modifier = Modifier
-                    .fillMaxWidth(0.6f)
-                    .height(75.dp)
-                ,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-            ) {
-                Text(
-                    text = "One Player",
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onSecondary
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Select Players", fontSize = 20.sp) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
-            }
-
-            Spacer(modifier = Modifier.height(20.dp)) // Space between buttons
-
-            // View Profile Button
-            Button(
-                onClick = {navController.navigate(Routes.Input)},
-                modifier = Modifier
-                    .fillMaxWidth(0.6f)
-                    .height(75.dp)
-                ,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
-            ) {
-                Text(
-                    text = "Two Players",
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onTertiary
-                )
-            }
+            )
         }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "How Many Players?",
+                fontSize = 28.sp,
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(top = 40.dp) // Adds space at the top
+            )
 
-        // Spacer to push everything to the right position
-        Spacer(modifier = Modifier.weight(1f))
+            // Spacer to push buttons to the middle
+            Spacer(modifier = Modifier.weight(1f))
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // One Player Button
+                Button(
+                    onClick = { navController.navigate(Routes.Difficulty) },
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .height(75.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                ) {
+                    Text(
+                        text = "One Player",
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // Two Players Button
+                Button(
+                    onClick = { navController.navigate(Routes.Input) },
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .height(75.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+                ) {
+                    Text(
+                        text = "Two Players",
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onTertiary
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+        }
     }
 }
 
-// ✅ Preview with the app theme
 @Preview(showBackground = true)
 @Composable
 fun PreviewPlayersScreen() {
@@ -88,3 +106,4 @@ fun PreviewPlayersScreen() {
         PlayersScreen(navController)
     }
 }
+
