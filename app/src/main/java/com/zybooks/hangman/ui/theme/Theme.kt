@@ -3,6 +3,7 @@ package com.zybooks.hangman.ui.theme
 import android.os.Build
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -41,21 +42,24 @@ private val LightColorScheme = lightColorScheme(
 fun HangmanTheme(
     content: @Composable () -> Unit
 ) {
-    val store = AppStorage(LocalContext.current)
+    val context = LocalContext.current
+    val store = remember { AppStorage(context) }
     val appPrefs = store.appPreferencesFlow.collectAsStateWithLifecycle(AppPreferences())
 
     val isDarkMode = appPrefs.value.darkMode
 
-    val colorScheme = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (isDarkMode) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    // Remember the color scheme based on darkMode
+    val colorScheme = remember(isDarkMode) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (isDarkMode) {
+                dynamicDarkColorScheme(context)
+            } else {
+                dynamicLightColorScheme(context)
+            }
+        } else {
+            if (isDarkMode) DarkColorScheme else LightColorScheme
         }
-
-        isDarkMode -> DarkColorScheme
-        else -> LightColorScheme
     }
-
 
     MaterialTheme(
         colorScheme = colorScheme,
