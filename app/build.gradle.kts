@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.zybooks.hangman"
+    namespace = "dev.csse.gill.hangman"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.zybooks.hangman"
+        applicationId = "dev.csse.gill.hangman"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
