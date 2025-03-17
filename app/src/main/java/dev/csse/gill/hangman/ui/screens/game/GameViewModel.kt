@@ -58,22 +58,15 @@ class GameViewModel : ViewModel() {
     // Filter words based on difficulty
     private fun filterWordsByDifficulty(difficulty: String): List<String> {
         return when (difficulty) {
-            "easy" -> wordList.filter { it.length in 3..5 }
+            "easy" -> wordList.filter { it.length in 2..4 }
             "medium" -> wordList.filter { it.length in 5..7 }
-            else -> wordList.filter { it.length in 6..9 } // Hard mode
-        }
-    }
-
-    private fun setDifficulty(difficulty: String) {
-        livesLeft = when (difficulty) {
-            "hard" -> 4
-            else -> 6 // Hard mode
+            else -> wordList.filter { it.length in 8..9 } // Hard mode
         }
     }
 
     fun setupGame(difficulty: String){
         generateWord(difficulty)
-        setDifficulty(difficulty)
+        livesLeft = 6
     }
 
     fun setWord(word: String){
